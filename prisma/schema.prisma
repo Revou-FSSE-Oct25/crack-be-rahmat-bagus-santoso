@@ -1,0 +1,185 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider     = "prisma-client-js"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  PARENT
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(PARENT)
+  createdAt DateTime @default(now())
+
+  children Child[]
+
+  @@map("users")
+}
+
+model Child {
+  id        String   @id @default(uuid())
+  name      String
+  avatar    String?
+  age       Int
+  pin       String?
+  createdAt DateTime @default(now())
+
+  parentId String @map("parent_id")
+  parent   User   @relation(fields: [parentId], references: [id], onDelete: Cascade)
+
+  quizSubmissions ChildQuizSubmission[]
+  moduleProgress  ChildModuleProgress[]
+  childBadges     ChildBadge[]
+
+  @@index([parentId])
+  @@map("children")
+}
+
+model Module {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  icon        String?
+  createdAt   DateTime @default(now())
+
+  lessons        Lesson[]
+  moduleProgress ChildModuleProgress[]
+
+  @@map("modules")
+}
+
+model Lesson {
+  id          String @id @default(uuid())
+  title       String
+  content     String
+  orderNumber Int
+
+  moduleId String @map("module_id")
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  quizzes Quiz[]
+
+  @@unique([moduleId, orderNumber])
+  @@index([moduleId])
+  @@map("lessons")
+}
+
+model Quiz {
+  id          String  @id @default(uuid())
+  question    String
+  explanation String?
+  orderNumber Int
+  points      Int     @default(10)
+
+  lessonId String @map("lesson_id")
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  options     QuizOption[]
+  submissions ChildQuizSubmission[]
+
+  @@unique([lessonId, orderNumber])
+  @@index([lessonId])
+  @@map("quizzes")
+}
+
+model QuizOption {
+  id         String  @id @default(uuid())
+  optionText String
+  isCorrect  Boolean
+
+  quizId String @map("quiz_id")
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  selectedInSubmissions ChildQuizSubmission[]
+
+  @@index([quizId])
+  @@map("quiz_options")
+}
+
+model ChildQuizSubmission {
+  id           String   @id @default(uuid())
+  isCorrect    Boolean  @default(false)
+  earnedPoints Int      @default(0)
+  submittedAt  DateTime @default(now())
+
+  childId String @map("child_id")
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  quizId String @map("quiz_id")
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  selectedOptionId String     @map("selected_option_id")
+  selectedOption   QuizOption @relation(fields: [selectedOptionId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, quizId])
+  @@index([childId])
+  @@index([quizId])
+  @@index([selectedOptionId])
+  @@map("child_quiz_submissions")
+}
+
+model ChildModuleProgress {
+  id               String         @id @default(uuid())
+  completedLessons Int            @default(0)
+  completedQuizzes Int            @default(0)
+  status           ProgressStatus @default(NOT_STARTED)
+  totalPoints      Int            @default(0)
+
+  childId  String @map("child_id")
+  child    Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+  moduleId String @map("module_id")
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, moduleId])
+  @@index([childId])
+  @@index([moduleId])
+  @@index([moduleId, status])
+  @@map("child_module_progress")
+}
+
+model Badge {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  imageUrl    String?
+
+  childBadges ChildBadge[]
+
+  @@map("badges")
+}
+
+model ChildBadge {
+  id       String   @id @default(uuid())
+  earnedAt DateTime @default(now())
+
+  childId String @map("child_id")
+  child   Child  @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  badgeId String @map("badge_id")
+  badge   Badge  @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, badgeId])
+  @@index([childId])
+  @@index([badgeId])
+  @@map("child_badges")
+}
