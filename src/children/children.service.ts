@@ -6,14 +6,16 @@ import { UpdateChildDto } from './dto/update-child.dto';
 import { ChildrenRepository } from './children.repository';
 import { AccessChildDto } from './dto/access-child.dto';
 
+export type SafeChild = Omit<Child, 'pin'>;
+
 @Injectable()
 export class ChildrenService {
   constructor (
     private readonly childRepository: ChildrenRepository
   ) {}
 
-  async create(parentId: string, createChildDto: CreateChildDto): Promise<Child> {
-    const data: Prisma.ChildCreateInput = {
+  async create(parentId: string, createChildDto: CreateChildDto): Promise<SafeChild> {
+    const childData: Prisma.ChildCreateInput = {
       ...createChildDto,
       parent: {
         connect: {
@@ -22,37 +24,47 @@ export class ChildrenService {
       },
     };
 
-    return this.childRepository.create(data);
+    const safeData = await this.childRepository.create(childData);
+
+    return this.toSafeChild(safeData);
   }
 
-  async findAllByParent(parentId: string): Promise<Child[]> {
-    return this.childRepository.findManyByParentId(parentId);
+  async findAllByParent(parentId: string): Promise<SafeChild[]> {
+    const children = await this.childRepository.findManyByParentId(parentId);
+    return children.map((child) => this.toSafeChild(child));
   }
 
   async findOneByParent(parentId: string, childId: string) {
-    return this.findOwnedChildOrFail(parentId, childId);
+    const safeData = await this.findOwnedChildOrFail(parentId, childId);
+    return this.toSafeChild(safeData);
   }
 
   async update(parentId: string, childId: string, updateChildDto: UpdateChildDto) {
     await this.findOwnedChildOrFail(parentId, childId);
 
-    const data: Prisma.ChildUpdateInput = {
+    const childData: Prisma.ChildUpdateInput = {
       ...updateChildDto,
     };
 
-    return this.childRepository.update(childId, data);
+    const updatedChild = await this.childRepository.update(childId, childData);
+
+    return this.toSafeChild(updatedChild);
   }
 
   async remove(parentId: string, childId: string) {
     await this.findOwnedChildOrFail(parentId, childId);
+
+    const deletedChild = await this.childRepository.remove(childId);
     
-    return this.childRepository.remove(childId);
+    return this.toSafeChild(deletedChild);
   }
 
   async accessChild(parentId: string, childId: string, accessChildDto: AccessChildDto): Promise<Child> {
     const child = await this.findOwnedChildOrFail(parentId, childId);
 
-    if(!child.pin) return child;
+    if(!child.pin) {
+      return this.toSafeChild(child);
+    }
 
     if (!accessChildDto.pin || accessChildDto.pin !== child.pin) {
       throw new UnauthorizedException('Pin required or incorrect');
@@ -69,5 +81,10 @@ export class ChildrenService {
     }
 
     return child;
+  }
+
+  private toSafeChild(child: Child) {
+    const { pin: _pin, ...safeChild} = child;
+    return safeChild
   }
 }

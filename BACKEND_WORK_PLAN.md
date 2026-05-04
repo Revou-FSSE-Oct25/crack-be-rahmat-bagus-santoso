@@ -150,7 +150,7 @@ Catatan:
 - Verifikasi dasar `npm run build` sudah lolos.
 
 ### Phase 7: Learning content domain
-Status: `TIDAK AMAN`
+Status: `AMAN`
 
 Yang dimaksud:
 - list module
@@ -164,8 +164,13 @@ Yang dimaksud:
 
 Catatan:
 - Model `Module`, `Lesson`, `Quiz`, dan `QuizOption` sudah ada.
-- Belum ada layer NestJS untuk module, lesson, dan quiz.
-- Belum ada application layer untuk submit jawaban dan validasi ownership/alur belajar.
+- Layer NestJS untuk module, lesson, dan quiz read-side sudah tersedia.
+- `Module` dan `Lesson` saat ini dibuka sebagai endpoint public untuk kebutuhan browse/preview content.
+- `Quiz` diakses melalui lesson dan tetap protected agar sesuai flow mulai belajar.
+- Query lesson dan quiz sudah mengikuti urutan `orderNumber ASC`.
+- Query quiz sudah menyertakan `options`.
+- Phase ini masih fokus read-side content, belum mencakup submit jawaban dan progress.
+- Verifikasi dasar `npm run build` sudah lolos.
 
 ### Phase 8: Child progress, point, badge
 Status: `TIDAK AMAN`

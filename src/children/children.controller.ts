@@ -5,9 +5,12 @@ import { UpdateChildDto } from './dto/update-child.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { AuthenticatedRequest } from '../utils/types/authenticated.request';
 import { AccessChildDto } from './dto/access-child.dto';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @ApiTags("Children")
 @ApiBearerAuth('authBearer')
+@Roles(Role.PARENT)
 @Controller('children')
 export class ChildrenController {
   constructor(private readonly childrenService: ChildrenService) {}

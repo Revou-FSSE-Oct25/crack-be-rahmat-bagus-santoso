@@ -9,6 +9,10 @@ import { RolesGuard } from './auth/guards/roles.guard';
 import { UsersModule } from './users/users.module';
 import { AdminModule } from './admin/admin.module';
 import { ChildrenModule } from './children/children.module';
+import { ModulesModule } from './modules/modules.module';
+import { LessonsModule } from './lessons/lessons.module';
+import { QuizzesModule } from './quizzes/quizzes.module';
+import { OptionsModule } from './options/options.module';
 
 
 @Module({
@@ -17,7 +21,11 @@ import { ChildrenModule } from './children/children.module';
     AuthModule,
     UsersModule,
     AdminModule,
-    ChildrenModule],
+    ChildrenModule,
+    ModulesModule,
+    LessonsModule,
+    QuizzesModule,
+    OptionsModule],
   controllers: [AppController],
   providers: [AppService,
     {
