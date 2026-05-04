@@ -55,7 +55,7 @@ export class AuthService {
     logout(){
         return {
             message:
-            'Logged out successfully'
+            'Logout succesful. Please remove the access token on the client side.'
         };
     }
 }

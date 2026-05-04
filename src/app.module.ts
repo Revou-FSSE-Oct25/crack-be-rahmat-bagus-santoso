@@ -8,6 +8,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { UsersModule } from './users/users.module';
 import { AdminModule } from './admin/admin.module';
+import { ChildrenModule } from './children/children.module';
 
 
 @Module({
@@ -15,7 +16,8 @@ import { AdminModule } from './admin/admin.module';
     ConfigModule.forRoot({ isGlobal: true}),
     AuthModule,
     UsersModule,
-    AdminModule],
+    AdminModule,
+    ChildrenModule],
   controllers: [AppController],
   providers: [AppService,
     {

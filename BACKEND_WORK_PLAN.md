@@ -74,7 +74,7 @@ Catatan akhir:
 
 
 ### Phase 3: Auth module, JWT, strategy, guards
-Status: `TIDAK AMAN`
+Status: `AMAN`
 
 Yang sudah ada:
 - register parent/basic user
@@ -90,12 +90,13 @@ Catatan:
 - Fondasi auth sudah ada di [src/auth](/home/cinnamon/Desktop/revou/CRACK/crack-be-rahmat-bagus-santoso/src/auth).
 - Service dasar password ada di [src/password/password.service.ts](/home/cinnamon/Desktop/revou/CRACK/crack-be-rahmat-bagus-santoso/src/password/password.service.ts:1).
 - Tipe `sub` di [src/auth/jwt.strategy.ts](/home/cinnamon/Desktop/revou/CRACK/crack-be-rahmat-bagus-santoso/src/auth/jwt.strategy.ts:6) sudah mengikuti `User.id` bertipe `string`.
-- Auth saat ini baru cocok untuk parent/admin, belum untuk child.
-- Boundary auth parent dan child belum dipisahkan dengan jelas.
-- Belum ada keputusan final apakah child PIN akan memakai `PasswordService` yang sama atau penanganan terpisah.
+- Auth saat ini secara sengaja difokuskan untuk parent/admin, bukan untuk child.
+- Boundary auth parent/admin dan child sudah jelas di level perencanaan: child tidak masuk ke jalur JWT yang sama.
+- Logout untuk MVP memakai pendekatan JWT stateless: frontend menghapus access token setelah logout.
+- Verifikasi dasar `npm run build` sudah lolos.
 
 ### Phase 4: Users module
-Status: `TIDAK AMAN`
+Status: `AMAN`
 
 Yang sudah ada:
 - `UsersController`
@@ -104,14 +105,14 @@ Yang sudah ada:
 - DTO create/update user
 
 Catatan penting:
-- Wiring module belum benar di [src/users/users.module.ts](/home/cinnamon/Desktop/revou/CRACK/crack-be-rahmat-bagus-santoso/src/users/users.module.ts:1).
-- `UsersModule` hanya mendaftarkan `UsersService`, tetapi belum menyediakan `UsersRepository`.
-- `UsersService` butuh `UsersRepository` dan `PasswordService`, tetapi module belum mengimpor `PasswordModule`.
-- `UsersService` juga belum diexport, padahal dipakai oleh `AuthModule`.
-- Jadi status module ini jelas `TIDAK AMAN`.
+- Wiring module di [src/users/users.module.ts](/home/cinnamon/Desktop/revou/CRACK/crack-be-rahmat-bagus-santoso/src/users/users.module.ts:1) sudah dilengkapi untuk kebutuhan saat ini.
+- `UsersRepository`, `PasswordModule`, dan `PrismaService` sudah terhubung untuk mendukung `UsersService`.
+- `UsersService` sudah diexport dan bisa dipakai oleh `AuthModule`.
+- Entity `User` saat ini sengaja dibuat minimal agar tidak bergantung ke module child yang belum dikerjakan.
+- Verifikasi dasar `npm run build` sudah lolos.
 
 ### Phase 5: Parent dan child account management
-Status: `TIDAK AMAN`
+Status: `AMAN`
 
 Flow yang dimaksud:
 - parent register
@@ -126,13 +127,14 @@ Flow yang dimaksud:
 - parent delete child
 
 Catatan:
-- Sebagian fondasi parent account ada, tetapi belum lengkap dan belum sepenuhnya sinkron dengan flow LittleStep.
-- Register parent saat ini baru membuat `User`, belum menyentuh flow child.
-- Di schema sudah ada model `Child`.
-- Tetapi belum ada module, service, controller, DTO, atau repository untuk child.
+- Fondasi parent account sudah ada melalui auth dan profile user yang sudah berjalan.
+- Child management sudah memiliki module, DTO, repository, service, dan controller.
+- Ownership check child sudah diterapkan: parent hanya bisa mengakses child miliknya sendiri.
+- `parentId` diambil dari JWT user yang login, bukan dari request body.
+- Verifikasi dasar `npm run build` sudah lolos.
 
 ### Phase 6: Child login / access flow
-Status: `TIDAK AMAN`
+Status: `AMAN`
 
 Flow yang dimaksud:
 - child pilih profile
@@ -141,8 +143,11 @@ Flow yang dimaksud:
 
 Catatan:
 - Brief sudah jelas: child tidak login dengan email/password.
-- Sampai sekarang belum ada desain endpoint dan belum ada mekanisme session child.
-- Ini perlu diputuskan sebelum masuk ke fitur progress dan quiz submission.
+- Flow access child untuk MVP sudah diputuskan sebagai child selection melalui parent yang sedang login.
+- Ownership child tetap divalidasi melalui parent JWT.
+- PIN child bersifat opsional: jika child tidak memiliki PIN maka akses langsung berhasil, jika child memiliki PIN maka PIN wajib cocok.
+- Belum memakai session table atau token child terpisah, sesuai scope MVP saat ini.
+- Verifikasi dasar `npm run build` sudah lolos.
 
 ### Phase 7: Learning content domain
 Status: `TIDAK AMAN`

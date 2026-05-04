@@ -12,21 +12,21 @@ export class AuthController {
         private readonly authService: AuthService
     ) {}
 
-    @ApiOperation({ summary: 'Register User'})
+    @ApiOperation({ summary: 'Register parent account'})
     @Public()
     @Post('register')
     async register(@Body() registerDto: RegisterDto) {
         return this.authService.register(registerDto);
     }
 
-    @ApiOperation({ summary: 'Login'})
+    @ApiOperation({ summary: 'Login parent or admin'})
     @Public()
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
         return this.authService.login(loginDto);
     }
 
-    @ApiOperation({ summary: 'Logout'})
+    @ApiOperation({ summary: 'Logout authenticated user'})
     @Post('logout')
     logout() {
         return this.authService.logout();
