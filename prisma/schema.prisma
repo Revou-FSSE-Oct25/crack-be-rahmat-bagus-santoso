@@ -64,6 +64,7 @@ model Module {
 
   lessons        Lesson[]
   moduleProgress ChildModuleProgress[]
+  Badge          Badge?
 
   @@map("modules")
 }
@@ -162,6 +163,9 @@ model Badge {
   name        String
   description String?
   imageUrl    String?
+
+  moduleId    String  @unique @map("module_id")
+  module      Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   childBadges ChildBadge[]
 

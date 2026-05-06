@@ -2,7 +2,7 @@ import { Controller, Get, Body, Patch, Param, Delete, Req } from '@nestjs/common
 import { UsersService, SafeUser } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { AuthenticatedRequest } from 'src/utils/types/authenticated.request';
+import type { AuthenticatedRequest } from '../utils/types/authenticated.request';
 
 @ApiTags('User')
 @ApiBearerAuth('authBearer')

@@ -7,5 +7,6 @@ import { ChildrenRepository } from './children.repository';
 @Module({
   controllers: [ChildrenController],
   providers: [PrismaService, ChildrenRepository, ChildrenService],
+  exports: [ChildrenService],
 })
 export class ChildrenModule {}

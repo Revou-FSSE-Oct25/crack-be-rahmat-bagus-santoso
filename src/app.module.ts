@@ -13,6 +13,7 @@ import { ModulesModule } from './modules/modules.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { QuizzesModule } from './quizzes/quizzes.module';
 import { OptionsModule } from './options/options.module';
+import { SubmissionsModule } from './submissions/submissions.module';
 
 
 @Module({
@@ -25,7 +26,8 @@ import { OptionsModule } from './options/options.module';
     ModulesModule,
     LessonsModule,
     QuizzesModule,
-    OptionsModule],
+    OptionsModule,
+    SubmissionsModule],
   controllers: [AppController],
   providers: [AppService,
     {

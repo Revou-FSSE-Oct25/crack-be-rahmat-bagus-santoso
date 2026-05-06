@@ -105,6 +105,7 @@ CREATE TABLE "badges" (
     "name" TEXT NOT NULL,
     "description" TEXT,
     "imageUrl" TEXT,
+    "module_id" TEXT NOT NULL,
 
     CONSTRAINT "badges_pkey" PRIMARY KEY ("id")
 );
@@ -165,6 +166,9 @@ CREATE INDEX "child_module_progress_module_id_status_idx" ON "child_module_progr
 CREATE UNIQUE INDEX "child_module_progress_child_id_module_id_key" ON "child_module_progress"("child_id", "module_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "badges_module_id_key" ON "badges"("module_id");
+
+-- CreateIndex
 CREATE INDEX "child_badges_child_id_idx" ON "child_badges"("child_id");
 
 -- CreateIndex
@@ -199,6 +203,9 @@ ALTER TABLE "child_module_progress" ADD CONSTRAINT "child_module_progress_child_
 
 -- AddForeignKey
 ALTER TABLE "child_module_progress" ADD CONSTRAINT "child_module_progress_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "badges" ADD CONSTRAINT "badges_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "modules"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "child_badges" ADD CONSTRAINT "child_badges_child_id_fkey" FOREIGN KEY ("child_id") REFERENCES "children"("id") ON DELETE CASCADE ON UPDATE CASCADE;

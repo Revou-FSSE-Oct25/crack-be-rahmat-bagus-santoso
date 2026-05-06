@@ -4,12 +4,12 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Quizzes')
 @ApiBearerAuth('authBearer')
-@Controller('lessons')
+@Controller('quizzes')
 export class QuizzesController {
   constructor(private readonly quizzesService: QuizzesService) {}
 
   @ApiOperation({ summary: 'Get quizzes by lesson id' })
-  @Get(':lessonId/quizzes')
+  @Get('by-lesson/:lessonId')
   findAll(@Param('lessonId') lessonId: string) {
     return this.quizzesService.findAllByLesson(lessonId);
   }
