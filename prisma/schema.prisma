@@ -64,7 +64,7 @@ model Module {
 
   lessons        Lesson[]
   moduleProgress ChildModuleProgress[]
-  Badge          Badge?
+  badge          Badge?
 
   @@map("modules")
 }

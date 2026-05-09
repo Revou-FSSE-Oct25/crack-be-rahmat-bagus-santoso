@@ -147,6 +147,11 @@ async function main() {
       name: 'Warna Hebat',
       description: 'Badge untuk anak yang menyelesaikan latihan warna.',
       imageUrl: 'badge-color.png',
+
+      // Codex note:
+      // Badge sekarang wajib terhubung ke tepat satu module
+      // karena field `moduleId` di schema bersifat required + unique.
+      moduleId: colorModule.id,
     },
   });
 

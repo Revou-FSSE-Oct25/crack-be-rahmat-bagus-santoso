@@ -14,6 +14,8 @@ import { LessonsModule } from './lessons/lessons.module';
 import { QuizzesModule } from './quizzes/quizzes.module';
 import { OptionsModule } from './options/options.module';
 import { SubmissionsModule } from './submissions/submissions.module';
+import { BadgesModule } from './badges/badges.module';
+import { ProgressModule } from './progress/progress.module';
 
 
 @Module({
@@ -27,7 +29,9 @@ import { SubmissionsModule } from './submissions/submissions.module';
     LessonsModule,
     QuizzesModule,
     OptionsModule,
-    SubmissionsModule],
+    SubmissionsModule,
+    BadgesModule,
+    ProgressModule],
   controllers: [AppController],
   providers: [AppService,
     {

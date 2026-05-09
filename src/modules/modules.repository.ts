@@ -11,13 +11,19 @@ export class ModulesRepository {
 
     findAll() {
         return this.prisma.module.findMany({
-            orderBy: { createdAt: 'asc' }
+            orderBy: { createdAt: 'asc' },
+            include: {
+                badge: true,
+            },
         });
     }
 
     findById(moduleId: string) {
         return this.prisma.module.findUnique({
             where: { id: moduleId },
+            include: {
+                badge: true,
+            },
         });
     }
 }
