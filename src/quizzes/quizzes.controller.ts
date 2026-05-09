@@ -6,11 +6,11 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 @ApiBearerAuth('authBearer')
 @Controller('quizzes')
 export class QuizzesController {
-  constructor(private readonly quizzesService: QuizzesService) {}
+  // constructor(private readonly quizzesService: QuizzesService) {}
 
-  @ApiOperation({ summary: 'Get quizzes by lesson id' })
-  @Get('by-lesson/:lessonId')
-  findAll(@Param('lessonId') lessonId: string) {
-    return this.quizzesService.findAllByLesson(lessonId);
-  }
+  // @ApiOperation({ summary: 'Get quizzes by lesson id' })
+  // @Get('by-lesson/:lessonId')
+  // findAll(@Param('lessonId') lessonId: string) {
+  //   return this.quizzesService.findAllByLesson(lessonId);
+  // }
 }

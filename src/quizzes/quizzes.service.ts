@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Quiz } from './entities/quiz.entity';
+import { QuizForChild } from './entities/quiz-for-child.entity';
 import { QuizzesRepository } from './quizzes.repository';
 
 @Injectable()
@@ -10,8 +11,9 @@ export class QuizzesService {
   //   return 'This action adds a new quiz';
   // }
 
-  findAllByLesson(lessonId: string): Promise<Quiz[]> {
-    return this.quizzesRepository.findManyByLessonId(lessonId);;
+  findAllForChildByLesson(lessonId: string): Promise<QuizForChild[]> {
+    const quizzes = this.quizzesRepository.findManyByLessonIdForChild(lessonId);
+    return quizzes;
   }
 
   // findOne(id: number) {
@@ -25,4 +27,14 @@ export class QuizzesService {
   // remove(id: number) {
   //   return `This action removes a #${id} quiz`;
   // }
+
+  async findOneOrFail(quizId: string): Promise<Quiz> {
+    const quiz = await this.quizzesRepository.findByIdWithOptions(quizId);
+
+    if(!quiz) {
+      throw new NotFoundException('Quiz not Found');
+    }
+
+    return quiz;
+  }
 }

@@ -9,11 +9,28 @@ export class QuizzesRepository {
     //update
     //delete
 
-    findManyByLessonId(lessonId: string) {
+    findManyByLessonIdForChild(lessonId: string) {
         return this.prisma.quiz.findMany({
             where: { lessonId },
             orderBy: { orderNumber: 'asc'},
-            include: { options: true },
+            include: {
+                options: {
+                    select: {
+                        id: true,
+                        optionText: true,
+                        quizId: true,
+                    },
+                },
+            },
+        });
+    }
+
+    findByIdWithOptions(quizId: string) {
+        return this.prisma.quiz.findUnique({
+            where: { id: quizId },
+            include: {
+                options: true,
+            },
         });
     }
 }

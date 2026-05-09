@@ -100,7 +100,7 @@ export class ChildrenService {
   ): Promise<Quiz[]> {
     await this.findOwnedChildOrFail(parentId, childId);
     const lesson = await this.lessonsService.findOne(lessonId);
-    const quizzes = await this.quizzesService.findAllByLesson(lesson.id);
+    const quizzes = await this.quizzesService.findAllForChildByLesson(lesson.id);
 
     return quizzes;
   }

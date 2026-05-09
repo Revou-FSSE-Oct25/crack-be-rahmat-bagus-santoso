@@ -1,26 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBadgeDto } from './dto/create-badge.dto';
-import { UpdateBadgeDto } from './dto/update-badge.dto';
+
+import { BadgesRepository } from './badges.repository';
+import { Badge } from './entities/badge.entity';
 
 @Injectable()
 export class BadgesService {
-  create(createBadgeDto: CreateBadgeDto) {
-    return 'This action adds a new badge';
-  }
+  constructor(private readonly badgesRepository: BadgesRepository) {}
 
-  findAll() {
-    return `This action returns all badges`;
-  }
+  async tryAwardBadge(childId: string, moduleId: string): Promise<Badge | null> {
+    const badge = await this.badgesRepository.findByModuleId(moduleId);
+    if (!badge) return null;
 
-  findOne(id: number) {
-    return `This action returns a #${id} badge`;
-  }
+    const alreadyAwarded = await this.badgesRepository.hasChildBadge(childId, badge.id);
+    if (alreadyAwarded) return null;
 
-  update(id: number, updateBadgeDto: UpdateBadgeDto) {
-    return `This action updates a #${id} badge`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} badge`;
+    await this.badgesRepository.awardBadge(childId, badge.id);
+    return badge;
   }
 }

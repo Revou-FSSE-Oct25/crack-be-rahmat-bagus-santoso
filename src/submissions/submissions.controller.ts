@@ -1,34 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SubmissionsService } from './submissions.service';
-// import { CreateSubmissionDto } from './dto/submit-quiz.dto';
-// import { UpdateSubmissionDto } from './dto/update-submission.dto';
+import { Body, Controller, Param, Post, Req } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
 
-@Controller('submissions')
+import { Roles } from '../auth/decorators/roles.decorator';
+import type { AuthenticatedRequest } from '../utils/types/authenticated.request';
+
+import { SubmissionsService } from './submissions.service';
+import { SubmitQuizDto } from './dto/submit-quiz.dto';
+
+@ApiTags('Submissions')
+@ApiBearerAuth('authBearer')
+@Roles(Role.PARENT)
+@Controller('children/:childId/lessons/:lessonId/quizzes/:quizId')
 export class SubmissionsController {
   constructor(private readonly submissionsService: SubmissionsService) {}
 
-  // @Post()
-  // create(@Body() createSubmissionDto: CreateSubmissionDto) {
-  //   return this.submissionsService.create(createSubmissionDto);
-  // }
-
-  @Get()
-  findAll() {
-    return this.submissionsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.submissionsService.findOne(+id);
-  }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateSubmissionDto: UpdateSubmissionDto) {
-  //   return this.submissionsService.update(+id, updateSubmissionDto);
-  // }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.submissionsService.remove(+id);
+  @ApiOperation({ summary: 'Submit a quiz answer for a child' })
+  @Post('submit')
+  submit(
+    @Req() request: AuthenticatedRequest,
+    @Param('childId') childId: string,
+    @Param('lessonId') lessonId: string,
+    @Param('quizId') quizId: string,
+    @Body() submitQuizDto: SubmitQuizDto,
+  ) {
+    return this.submissionsService.submit(
+      request.user.userId,
+      childId,
+      lessonId,
+      quizId,
+      submitQuizDto,
+    );
   }
 }

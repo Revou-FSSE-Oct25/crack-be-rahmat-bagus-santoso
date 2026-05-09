@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProgressDto } from './dto/create-progress.dto';
-import { UpdateProgressDto } from './dto/update-progress.dto';
+
+import { ProgressRepository } from './progress.repository';
 
 @Injectable()
 export class ProgressService {
-  create(createProgressDto: CreateProgressDto) {
-    return 'This action adds a new progress';
-  }
+  constructor(private readonly progressRepository: ProgressRepository) {}
 
-  findAll() {
-    return `This action returns all progress`;
-  }
+  async updateAfterSubmission(
+    childId: string,
+    moduleId: string,
+    earnedPoints: number,
+  ): Promise<{ isCompleted: boolean }> {
+    const progress = await this.progressRepository.upsertProgress(childId, moduleId, earnedPoints);
+    const totalQuizzes = await this.progressRepository.countTotalQuizzesInModule(moduleId);
 
-  findOne(id: number) {
-    return `This action returns a #${id} progress`;
-  }
+    const isCompleted = progress.completedQuizzes >= totalQuizzes;
 
-  update(id: number, updateProgressDto: UpdateProgressDto) {
-    return `This action updates a #${id} progress`;
-  }
+    if (isCompleted) {
+      await this.progressRepository.markCompleted(childId, moduleId);
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} progress`;
+    return { isCompleted };
   }
 }
