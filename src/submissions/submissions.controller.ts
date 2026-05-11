@@ -1,10 +1,8 @@
 import { Body, Controller, Param, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
-
 import { Roles } from '../auth/decorators/roles.decorator';
 import type { AuthenticatedRequest } from '../utils/types/authenticated.request';
-
 import { SubmissionsService } from './submissions.service';
 import { SubmitQuizDto } from './dto/submit-quiz.dto';
 

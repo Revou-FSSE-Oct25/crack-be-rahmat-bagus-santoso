@@ -1,5 +1,4 @@
 import { Controller } from '@nestjs/common';
-
 import { BadgesService } from './badges.service';
 
 @Controller('badges')

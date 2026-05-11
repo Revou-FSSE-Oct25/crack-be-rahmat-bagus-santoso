@@ -1,8 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { ModulesRepository } from './modules.repository';
-import { Module } from './entities/module.entity';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { LessonsService } from '../lessons/lessons.service';
 import { Lesson } from '../lessons/entities/lesson.entity';
+import { ModulesRepository } from './modules.repository';
+import { CreateModuleDto } from './dto/create-module.dto';
+import { UpdateModuleDto } from './dto/update-module.dto';
+import { Module } from './entities/module.entity';
 
 @Injectable()
 export class ModulesService {
@@ -10,9 +13,14 @@ export class ModulesService {
     private readonly modulesRepository: ModulesRepository,
     private readonly lessonsService: LessonsService,
   ) {}
-  // create(createModuleDto: CreateModuleDto) {
-  //   return 'This action adds a new module';
-  // }
+
+  async create(createModuleDto: CreateModuleDto): Promise<Module> {
+    await this.ensureModuleTitleAvailable(createModuleDto.title);
+    const data: Prisma.ModuleCreateInput = { 
+      ...createModuleDto
+    };
+    return this.modulesRepository.create(data);
+  }
 
   async findAll(): Promise<Module[]> {
     return this.modulesRepository.findAll();
@@ -28,13 +36,30 @@ export class ModulesService {
     return this.lessonsService.findAllByModule(moduleId);
   }
 
-  // update(id: number, updateModuleDto: UpdateModuleDto) {
-  //   return `This action updates a #${id} module`;
-  // }
+  async update(moduleId: string, updateModuleDto: UpdateModuleDto): Promise<Module> {
+    await this.findExistingModuleOrFail(moduleId);
+    
+    if(updateModuleDto.title !== undefined) {
+      await this.ensureModuleTitleAvailable(updateModuleDto.title, moduleId);
+    }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} module`;
-  // }
+    const data: Prisma.ModuleUpdateInput = {
+      ...updateModuleDto
+    }
+    return this.modulesRepository.update(moduleId, data);
+  }
+
+  async remove(moduleId: string): Promise<Module> {
+    await this.findExistingModuleOrFail(moduleId)
+    return this.modulesRepository.remove(moduleId);
+  }
+
+  private async ensureModuleTitleAvailable(title: string, excludeModuleId?: string): Promise<void> {
+    const existing = await this.modulesRepository.findByTitle(title);
+    if(existing && existing.id !== excludeModuleId) {
+      throw new ConflictException( `Module with title "${title}" already exist` );
+    }
+  }
 
   private async findExistingModuleOrFail(moduleId: string): Promise<Module> {
     const module = await this.modulesRepository.findById(moduleId);

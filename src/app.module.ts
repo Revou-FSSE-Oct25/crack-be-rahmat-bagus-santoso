@@ -12,11 +12,9 @@ import { ChildrenModule } from './children/children.module';
 import { ModulesModule } from './modules/modules.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { QuizzesModule } from './quizzes/quizzes.module';
-import { OptionsModule } from './options/options.module';
 import { SubmissionsModule } from './submissions/submissions.module';
 import { BadgesModule } from './badges/badges.module';
 import { ProgressModule } from './progress/progress.module';
-
 
 @Module({
   imports: [
@@ -28,7 +26,6 @@ import { ProgressModule } from './progress/progress.module';
     ModulesModule,
     LessonsModule,
     QuizzesModule,
-    OptionsModule,
     SubmissionsModule,
     BadgesModule,
     ProgressModule],

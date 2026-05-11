@@ -14,7 +14,6 @@ export class UsersService {
     private readonly passwordService: PasswordService
   ) {}
 
-  // create new user from register.auth.service and next admin by admin from create.admin.user.service, still on discussion
   async create(createUserDto: CreateUserDto): Promise<SafeUser> {
     const existingUser = await this.usersRepository.findByEmail(createUserDto.email);
 
@@ -32,12 +31,10 @@ export class UsersService {
     return this.toSafeUser(user);
   }
 
-  // login dan cek email saat register
   async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findByEmail(email);
   }
 
-  // admin needs
   async findAll(): Promise<SafeUser[]> {
     const users = await this.usersRepository.findAll();
     return users.map((user) => this.toSafeUser(user));

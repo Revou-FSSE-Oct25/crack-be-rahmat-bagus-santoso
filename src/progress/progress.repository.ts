@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
 import { ProgressStatus } from "@prisma/client";
-import { Child } from "../children/entities/child.entity";
+import { PrismaService } from "../prisma.service";
 
 @Injectable()
 export class ProgressRepository {

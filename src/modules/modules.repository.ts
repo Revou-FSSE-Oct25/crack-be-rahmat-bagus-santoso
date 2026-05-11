@@ -1,13 +1,17 @@
 import { Injectable } from "@nestjs/common";
+import { Prisma } from '@prisma/client';
 import { PrismaService } from "../prisma.service";
 
 @Injectable()
 export class ModulesRepository {
     constructor(private readonly prisma: PrismaService) {}
 
-    // create
-    // update
-    // remove
+    create(data: Prisma.ModuleCreateInput) {
+        return this.prisma.module.create({
+            data,
+            include: { badge: true },
+        });
+    }
 
     findAll() {
         return this.prisma.module.findMany({
@@ -24,6 +28,27 @@ export class ModulesRepository {
             include: {
                 badge: true,
             },
+        });
+    }
+
+    findByTitle(title: string) {
+        return this.prisma.module.findFirst({
+            where: { title },
+            include: { badge: true },
+        });
+    }
+
+    update(moduleId: string, data: Prisma.ModuleUpdateInput) {
+        return this.prisma.module.update({
+            where: { id: moduleId },
+            data,
+            include: { badge: true },
+        });
+    }
+
+    remove(moduleId: string) {
+        return this.prisma.module.delete({
+            where: { id: moduleId },
         });
     }
 }

@@ -57,7 +57,7 @@ model Child {
 
 model Module {
   id          String   @id @default(uuid())
-  title       String
+  title       String   @unique
   description String?
   icon        String?
   createdAt   DateTime @default(now())

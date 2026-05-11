@@ -1,21 +1,12 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Req,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
+import { Roles } from '../auth/decorators/roles.decorator';
+import type { AuthenticatedRequest } from '../utils/types/authenticated.request';
 import { ChildrenService } from './children.service';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { AuthenticatedRequest } from '../utils/types/authenticated.request';
 import { AccessChildDto } from './dto/access-child.dto';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { Role } from '@prisma/client';
 
 @ApiTags('Children')
 @ApiBearerAuth('authBearer')

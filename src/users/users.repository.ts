@@ -10,7 +10,6 @@ export class UsersRepository {
     return this.prisma.user.create({ data });
   }
 
-  // digunakan untuk login dan pengecekan email unik saat register
   findByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },
@@ -30,7 +29,6 @@ export class UsersRepository {
       where: { id },
     });
   }
-
 
   update(id: string, data: Prisma.UserUpdateInput) {
     return this.prisma.user.update({

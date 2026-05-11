@@ -1,17 +1,13 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { LessonsService } from '../lessons/lessons.service';
+import { QuizzesService } from '../quizzes/quizzes.service';
+import { Quiz } from '../quizzes/entities/quiz.entity';
+import { ChildrenRepository } from './children.repository';
 import { Child } from './entities/child.entity';
 import { CreateChildDto } from './dto/create-child.dto';
 import { UpdateChildDto } from './dto/update-child.dto';
 import { AccessChildDto } from './dto/access-child.dto';
-import { ChildrenRepository } from './children.repository';
-import { LessonsService } from '../lessons/lessons.service';
-import { QuizzesService } from '../quizzes/quizzes.service';
-import { Quiz } from '../quizzes/entities/quiz.entity';
 
 export type SafeChild = Omit<Child, 'pin'>;
 

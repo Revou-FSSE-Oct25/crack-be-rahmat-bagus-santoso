@@ -1,5 +1,4 @@
 import { Controller } from '@nestjs/common';
-
 import { ProgressService } from './progress.service';
 
 @Controller('progress')

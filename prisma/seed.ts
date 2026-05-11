@@ -31,7 +31,7 @@ async function main() {
   await prisma.child.deleteMany();
   await prisma.user.deleteMany();
 
-  const admin = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: 'Admin LittleStep',
       email: 'admin@littlestep.test',
@@ -147,18 +147,18 @@ async function main() {
       name: 'Warna Hebat',
       description: 'Badge untuk anak yang menyelesaikan latihan warna.',
       imageUrl: 'badge-color.png',
-
-      // Codex note:
-      // Badge sekarang wajib terhubung ke tepat satu module
-      // karena field `moduleId` di schema bersifat required + unique.
       moduleId: colorModule.id,
     },
   });
 
   const selectedRedOption = redQuiz.options.find((option) => option.isCorrect);
-
   if (!selectedRedOption) {
     throw new Error('Seed failed: correct option for red quiz was not found.');
+  }
+
+  const selectedBlueOption = blueQuiz.options.find((option) => option.isCorrect);
+  if (!selectedBlueOption) {
+    throw new Error('Seed failed: correct option for blue quiz was not found.');
   }
 
   await prisma.childQuizSubmission.create({
@@ -167,8 +167,17 @@ async function main() {
       quizId: redQuiz.id,
       selectedOptionId: selectedRedOption.id,
       isCorrect: true,
-      // Field name follows your current schema: earnedPoints
       earnedPoints: redQuiz.points,
+    },
+  });
+
+  await prisma.childQuizSubmission.create({
+    data: {
+      childId: child.id,
+      quizId: blueQuiz.id,
+      selectedOptionId: selectedBlueOption.id,
+      isCorrect: true,
+      earnedPoints: blueQuiz.points,
     },
   });
 
@@ -176,10 +185,10 @@ async function main() {
     data: {
       childId: child.id,
       moduleId: colorModule.id,
-      completedLessons: 1,
-      completedQuizzes: 1,
-      totalPoints: redQuiz.points,
-      status: ProgressStatus.IN_PROGRESS,
+      completedLessons: 2,
+      completedQuizzes: 2,
+      totalPoints: redQuiz.points + blueQuiz.points,
+      status: ProgressStatus.COMPLETED,
     },
   });
 
@@ -194,8 +203,8 @@ async function main() {
   console.log('Demo accounts:');
   console.log('- Admin  : admin@littlestep.test / admin123');
   console.log('- Parent : parent@littlestep.test / parent123');
-  console.log(`- Child  : ${child.name} / no PIN`);
-  console.log(`Seeded quiz count: ${[redQuiz, blueQuiz].length}`);
+  console.log(`- Child  : ${child.name} (age ${child.age}) / no PIN`);
+  console.log(`- Color module: COMPLETED — ${redQuiz.points + blueQuiz.points} pts, badge earned`);
 }
 
 main()

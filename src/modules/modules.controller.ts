@@ -1,8 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ModulesService } from './modules.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/decorators/public.decorator';
-
+import { ModulesService } from './modules.service';
 
 @ApiTags('Modules')
 @Public()

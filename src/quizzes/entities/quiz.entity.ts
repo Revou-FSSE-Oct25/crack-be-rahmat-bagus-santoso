@@ -1,4 +1,3 @@
-import { Option } from '../../options/entities/option.entity'; 
 
 export class Quiz {
     id!: string;
@@ -7,5 +6,4 @@ export class Quiz {
     orderNumber!: number;
     points!: number;
     lessonId!: string;
-    options!: Option[]
 }

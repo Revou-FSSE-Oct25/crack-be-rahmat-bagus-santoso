@@ -57,8 +57,3 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /generated/prisma
 
-# codex
-.codex
-.agents
-BACKEND_WORK_PLAN.md
-/CLAUDE.md

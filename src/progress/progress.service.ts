@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
 import { ProgressRepository } from './progress.repository';
 
 @Injectable()

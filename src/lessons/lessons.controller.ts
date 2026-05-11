@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { LessonsService } from './lessons.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/decorators/public.decorator';
+import { LessonsService } from './lessons.service';
 
 @ApiTags('Lessons')
 @Public()
