@@ -13,8 +13,11 @@ export class ModulesRepository {
         });
     }
 
-    findAll() {
+    findAll(search?: string) {
         return this.prisma.module.findMany({
+            where: search ? {
+                title: { contains: search, mode: 'insensitive'}
+            } : undefined,
             orderBy: { createdAt: 'asc' },
             include: {
                 badge: true,

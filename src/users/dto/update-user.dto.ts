@@ -8,19 +8,19 @@ import {
 } from 'class-validator';
 
 export class UpdateUserDto {
-  @ApiProperty({ description: 'Full name of the user' })
+  @ApiProperty({ example: 'Parent Demo', description: 'Full name of the user' })
   @IsOptional()
   @IsString()
   @IsNotEmpty()
   name!: string;
 
-  @ApiProperty({ description: 'Email address of the user' })
+  @ApiProperty({ example: 'parent@littlestep.test', description: 'Email address of the user' })
   @IsOptional()
   @IsEmail()
   @IsNotEmpty()
   email!: string;
 
-  @ApiProperty({ description: 'Password for the user account' })
+  @ApiProperty({ example: 'newpassword123', description: 'Password for the user account' })
   @IsOptional()
   @IsString()
   @IsNotEmpty()

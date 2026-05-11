@@ -2,12 +2,12 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from "class-validator";
 
 export class CreateChildDto {
-    @ApiProperty({ example: 'child1', description: 'The name of child'})
+    @ApiProperty({ example: 'Nana', description: 'The name of child'})
     @IsString()
     @IsNotEmpty()
     name!: string;
 
-    @ApiProperty({ example: '', description: 'Child Avatar'})
+    @ApiProperty({ example: 'avatar-cat.png', description: 'Child Avatar'})
     @IsString()
     @IsOptional()
     avatar?: string;
@@ -19,7 +19,7 @@ export class CreateChildDto {
     @Max(10)
     age!: number;
 
-    @ApiProperty({ example: '', description: 'Child pin'})
+    @ApiProperty({ example: null, description: 'Child pin'})
     @IsString()
     @IsOptional()
     pin?: string;

@@ -15,11 +15,14 @@ import { UsersModule } from "../users/users.module";
         UsersModule,
         PasswordModule,
         PassportModule,
-        JwtModule.register({
-            secret: process.env.JWT_SECRET,
+        JwtModule.registerAsync({
+            useFactory: () => ({
+                 secret: process.env.JWT_SECRET,
             signOptions: {
                 expiresIn: process.env.JWT_EXPIRES_IN as any
             },
+            })
+           
         }),
     ],
     controllers: [AuthController],

@@ -22,8 +22,8 @@ export class ModulesService {
     return this.modulesRepository.create(data);
   }
 
-  async findAll(): Promise<Module[]> {
-    return this.modulesRepository.findAll();
+  async findAll(search?: string): Promise<Module[]> {
+    return this.modulesRepository.findAll(search);
   }
 
   async findOne(moduleId: string): Promise<Module> {

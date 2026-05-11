@@ -15,7 +15,7 @@ import { AccessChildDto } from './dto/access-child.dto';
 export class ChildrenController {
   constructor(private readonly childrenService: ChildrenService) {}
 
-  @ApiOperation({ summary: 'Create child for current parent' })
+  @ApiOperation({ summary: 'Create a child profile by current parent' })
   @Post()
   create(
     @Req() request: AuthenticatedRequest,
@@ -24,13 +24,13 @@ export class ChildrenController {
     return this.childrenService.create(request.user.userId, createChildDto);
   }
 
-  @ApiOperation({ summary: 'Get all children for current parent' })
+  @ApiOperation({ summary: 'Get all children profile owned by current parent' })
   @Get()
   findAll(@Req() request: AuthenticatedRequest) {
     return this.childrenService.findAllByParent(request.user.userId);
   }
 
-  @ApiOperation({ summary: 'Get child detail for current parent' })
+  @ApiOperation({ summary: 'Get child profile detail owned by current parent' })
   @Get(':childId')
   findOne(
     @Req() request: AuthenticatedRequest,
@@ -39,7 +39,7 @@ export class ChildrenController {
     return this.childrenService.findOneByParent(request.user.userId, childId);
   }
 
-  @ApiOperation({ summary: 'Update child for current parent' })
+  @ApiOperation({ summary: 'Update child profile owned by current parent' })
   @Patch(':childId')
   update(
     @Req() request: AuthenticatedRequest,
@@ -53,7 +53,7 @@ export class ChildrenController {
     );
   }
 
-  @ApiOperation({ summary: 'Delete child for current parent' })
+  @ApiOperation({ summary: 'Delete child profile owned by current parent' })
   @Delete(':childId')
   remove(
     @Req() request: AuthenticatedRequest,
