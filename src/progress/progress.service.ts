@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProgressRepository } from './progress.repository';
+import { ProgressModule } from './progress.module';
 
 @Injectable()
 export class ProgressService {
@@ -20,5 +21,9 @@ export class ProgressService {
     }
 
     return { isCompleted };
+  }
+
+  async getProgressByChild(childId: string) {
+    return this.progressRepository.findAllByChildId(childId);
   }
 }

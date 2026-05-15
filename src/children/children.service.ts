@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { Prisma } from '@prisma/client';
 import { LessonsService } from '../lessons/lessons.service';
 import { QuizzesService } from '../quizzes/quizzes.service';
+import { ProgressService } from '../progress/progress.service';
 import { Quiz } from '../quizzes/entities/quiz.entity';
 import { ChildrenRepository } from './children.repository';
 import { Child } from './entities/child.entity';
@@ -17,6 +18,7 @@ export class ChildrenService {
     private readonly childRepository: ChildrenRepository,
     private readonly lessonsService: LessonsService,
     private readonly quizzesService: QuizzesService,
+    private readonly progressService: ProgressService,
   ) {}
 
   async create(
@@ -99,6 +101,11 @@ export class ChildrenService {
     const quizzes = await this.quizzesService.findAllForChildByLesson(lesson.id);
 
     return quizzes;
+  }
+
+  async getChildProgress(parentId: string, childId: string) {
+    await this.findOwnedChildOrFail(parentId, childId);
+    return this.progressService.getProgressByChild(childId);
   }
 
   private async findOwnedChildOrFail(

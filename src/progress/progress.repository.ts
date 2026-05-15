@@ -45,4 +45,10 @@ export class ProgressRepository {
             },
         });
     }
+
+    findAllByChildId(childId: string) {
+        return this.prisma.childModuleProgress.findMany({
+            where: { childId},
+        });
+    }
 }

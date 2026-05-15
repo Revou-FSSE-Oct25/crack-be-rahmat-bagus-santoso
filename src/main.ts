@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors('https://crack-fe-rahmat-bagus-santoso.vercel.app/');
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(
     new ValidationPipe({

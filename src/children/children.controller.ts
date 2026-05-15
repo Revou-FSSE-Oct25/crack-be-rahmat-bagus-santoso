@@ -39,6 +39,12 @@ export class ChildrenController {
     return this.childrenService.findOneByParent(request.user.userId, childId);
   }
 
+  @ApiOperation({ summary: 'Get all module progress for child' })
+  @Get(':childId/progress')
+  getProgress(@Req() request: AuthenticatedRequest, @Param('childId') childId: string) {
+    return this.childrenService.getChildProgress(request.user.userId, childId);
+  }
+
   @ApiOperation({ summary: 'Update child profile owned by current parent' })
   @Patch(':childId')
   update(
